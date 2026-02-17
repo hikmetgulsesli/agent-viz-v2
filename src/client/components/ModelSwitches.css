@@ -225,6 +225,89 @@
   }
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .model-switches__scroll-container {
+    padding: var(--space-3);
+  }
+
+  .model-switches__item {
+    padding: var(--space-4);
+    min-height: 60px; /* Touch target */
+    gap: var(--space-3);
+  }
+
+  .model-switches__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .model-switches__agent-id {
+    font-size: var(--text-sm);
+  }
+
+  .model-switches__model {
+    font-size: var(--text-xs);
+    max-width: 120px;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .model-switches__transition {
+    gap: var(--space-1);
+  }
+
+  .model-switches--empty {
+    min-height: 250px;
+    padding: var(--space-4);
+  }
+
+  .model-switches__empty-text {
+    font-size: var(--text-lg);
+  }
+}
+
+@media (max-width: 375px) {
+  .model-switches__scroll-container {
+    padding: var(--space-2);
+  }
+
+  .model-switches__item {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .model-switches__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .model-switches__model {
+    max-width: 100px;
+    font-size: var(--text-xs);
+  }
+
+  .model-switches__timestamp {
+    font-size: var(--text-xs);
+  }
+
+  .model-switches__reason {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .model-switches__item {
+    min-height: 60px;
+    padding: var(--space-4);
+  }
+
+  /* Remove hover transform on touch devices */
+  .model-switches__item:hover {
+    transform: none;
+  }
+}
+
 /* Light Mode Overrides */
 [data-theme="light"] .model-switches__item {
   background: rgba(0, 0, 0, 0.02);

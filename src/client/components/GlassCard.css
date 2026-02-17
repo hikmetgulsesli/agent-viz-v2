@@ -82,6 +82,35 @@
   }
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .glass-card__header {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .glass-card__title {
+    font-size: var(--text-base);
+  }
+
+  .glass-card__content {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 375px) {
+  .glass-card__header {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .glass-card__title {
+    font-size: var(--text-sm);
+  }
+
+  .glass-card__content {
+    padding: var(--space-3);
+  }
+}
+
 /* Light mode adjustments */
 [data-theme="light"] .glass-card {
   background-color: rgba(255, 255, 255, 0.7);

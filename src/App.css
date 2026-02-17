@@ -41,12 +41,14 @@
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-muted) 100%);
   border-radius: var(--radius-lg);
   color: var(--surface);
+  flex-shrink: 0;
 }
 
 .app-header__text {
   display: flex;
   flex-direction: column;
   gap: var(--space-0);
+  min-width: 0;
 }
 
 .app-header__title {
@@ -55,6 +57,7 @@
   font-weight: var(--font-bold);
   color: var(--text);
   line-height: var(--leading-tight);
+  text-wrap: balance;
 }
 
 .app-header__subtitle {
@@ -67,6 +70,32 @@
 .app-header__status {
   display: flex;
   align-items: center;
+}
+
+/* Mobile Menu Toggle Button */
+.app-header__menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default);
+}
+
+.app-header__menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-subtle);
+}
+
+.app-header__menu-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* ============================================
@@ -139,6 +168,61 @@
 }
 
 /* ============================================
+   Mobile Tab Navigation
+   ============================================ */
+.mobile-tabs {
+  display: none;
+  background-color: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-2) var(--space-4);
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.mobile-tabs::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.mobile-tabs__button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default),
+              color var(--duration-fast) var(--ease-default);
+  min-height: 44px; /* Touch target */
+}
+
+.mobile-tabs__button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-subtle);
+  color: var(--text);
+}
+
+.mobile-tabs__button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.mobile-tabs__button--active {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ============================================
    Footer
    ============================================ */
 .app-footer {
@@ -182,7 +266,7 @@
    Responsive Design - Mobile Stacking
    ============================================ */
 
-/* Tablet breakpoint */
+/* Tablet breakpoint (1024px) */
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr 1.5fr; /* Two columns on tablet */
@@ -214,18 +298,40 @@
   }
 }
 
-/* Mobile breakpoint */
+/* Mobile breakpoint (768px) */
 @media (max-width: 768px) {
   .app-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-4);
   }
 
+  .app-header__brand {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .app-header__title {
+    font-size: var(--text-lg);
+  }
+
+  .app-header__subtitle {
+    font-size: var(--text-xs);
+    display: none; /* Hide subtitle on mobile to save space */
+  }
+
   .app-header__status {
-    align-self: stretch;
-    justify-content: flex-start;
+    display: none; /* Hide status in header on mobile */
+  }
+
+  .app-header__menu-toggle {
+    display: flex;
+  }
+
+  /* Show mobile tabs */
+  .mobile-tabs {
+    display: flex;
   }
 
   .app-main {
@@ -239,8 +345,14 @@
     min-height: auto;
   }
 
+  /* Show only active column on mobile */
   .dashboard-column {
     min-height: auto;
+    display: none;
+  }
+
+  .dashboard-column--active {
+    display: flex;
   }
 
   .dashboard-stacked {
@@ -248,12 +360,12 @@
   }
 
   .dashboard-card {
-    min-height: 300px;
+    min-height: 400px;
   }
 
   .dashboard-card--half {
     max-height: none;
-    min-height: 250px;
+    min-height: 300px;
   }
 
   .app-footer {
@@ -268,28 +380,76 @@
   }
 }
 
-/* Small mobile breakpoint */
+/* Small mobile breakpoint (375px) */
 @media (max-width: 375px) {
-  .app-header__title {
-    font-size: var(--text-lg);
+  .app-header {
+    padding: var(--space-2) var(--space-3);
   }
 
-  .app-header__subtitle {
-    font-size: var(--text-xs);
+  .app-header__logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .app-header__title {
+    font-size: var(--text-base);
   }
 
   .app-main {
     padding: var(--space-2) var(--space-3);
   }
 
+  .mobile-tabs {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .mobile-tabs__button {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    min-height: 40px;
+  }
+
   .dashboard-grid {
     gap: var(--space-3);
+  }
+
+  .dashboard-card {
+    min-height: 350px;
+  }
+
+  .app-footer {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
   }
 
   .app-footer__stats {
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-3);
+  }
+
+  .app-footer__stat {
+    gap: var(--space-0);
+  }
+}
+
+/* Large desktop breakpoint (1440px+) */
+@media (min-width: 1440px) {
+  .app-main {
+    padding: var(--space-6) var(--space-8);
+  }
+
+  .dashboard-grid {
+    gap: var(--space-6);
+    min-height: calc(100vh - 200px);
+  }
+
+  .app-header {
+    padding: var(--space-5) var(--space-8);
+  }
+
+  .app-footer {
+    padding: var(--space-4) var(--space-8);
   }
 }
 
@@ -300,7 +460,9 @@
   .app-header,
   .app-footer,
   .dashboard-grid,
-  .dashboard-card {
+  .dashboard-card,
+  .mobile-tabs__button,
+  .app-header__menu-toggle {
     transition: none;
   }
 }
@@ -310,4 +472,48 @@
    ============================================ */
 [data-theme="light"] .app-header__logo {
   color: white;
+}
+
+[data-theme="light"] .mobile-tabs {
+  background-color: var(--surface);
+}
+
+[data-theme="light"] .mobile-tabs__button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .mobile-tabs__button--active {
+  background: rgba(34, 211, 238, 0.15);
+}
+
+[data-theme="light"] .app-header__menu-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   Touch Device Optimizations
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets on touch devices */
+  .agent-card {
+    padding: var(--space-4);
+    min-height: 64px;
+  }
+
+  .activity-feed__item {
+    padding: var(--space-4);
+    min-height: 60px;
+  }
+
+  /* Remove hover effects on touch devices */
+  .agent-card:hover,
+  .activity-feed__item:hover {
+    transform: none;
+  }
+
+  /* Ensure scroll indicators are tappable */
+  .activity-feed__scroll-indicator {
+    min-height: 44px;
+    padding: var(--space-3) var(--space-5);
+  }
 }

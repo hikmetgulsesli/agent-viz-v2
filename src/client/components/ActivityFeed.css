@@ -278,6 +278,93 @@
   }
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .activity-feed__scroll-container {
+    padding: var(--space-3);
+  }
+
+  .activity-feed__item {
+    padding: var(--space-4);
+    min-height: 60px; /* Touch target */
+    gap: var(--space-3);
+  }
+
+  .activity-feed__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .activity-feed__description {
+    font-size: var(--text-sm);
+  }
+
+  .activity-feed__type-badge {
+    font-size: var(--text-xs);
+    padding: 2px 6px;
+  }
+
+  .activity-feed__scroll-indicator {
+    min-height: 44px; /* Touch target */
+    padding: var(--space-3) var(--space-5);
+  }
+
+  .activity-feed--empty {
+    min-height: 250px;
+    padding: var(--space-4);
+  }
+
+  .activity-feed__empty-text {
+    font-size: var(--text-lg);
+  }
+}
+
+@media (max-width: 375px) {
+  .activity-feed__scroll-container {
+    padding: var(--space-2);
+  }
+
+  .activity-feed__item {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .activity-feed__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .activity-feed__description {
+    font-size: var(--text-xs);
+  }
+
+  .activity-feed__agent-id {
+    font-size: var(--text-xs);
+  }
+
+  .activity-feed__timestamp {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .activity-feed__item {
+    min-height: 60px;
+    padding: var(--space-4);
+  }
+
+  /* Remove hover transform on touch devices */
+  .activity-feed__item:hover {
+    transform: none;
+  }
+
+  .activity-feed__scroll-indicator {
+    min-height: 48px;
+    padding: var(--space-3) var(--space-5);
+  }
+}
+
 /* Light Mode Overrides */
 [data-theme="light"] .activity-feed__item {
   background: rgba(0, 0, 0, 0.02);

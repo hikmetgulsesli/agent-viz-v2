@@ -337,6 +337,101 @@
   }
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .token-usage {
+    gap: var(--space-4);
+  }
+
+  .token-usage__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .token-usage__total-value {
+    font-size: var(--text-xl);
+  }
+
+  .token-usage__breakdown {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .token-usage__bar-row {
+    gap: var(--space-2);
+  }
+
+  .token-usage__bar-label {
+    width: 80px;
+    font-size: var(--text-xs);
+  }
+
+  .token-usage__bar-container {
+    height: 20px;
+  }
+
+  .token-usage__bar-value {
+    width: 50px;
+    font-size: var(--text-xs);
+  }
+
+  .token-usage__model-bar {
+    height: 28px;
+  }
+
+  .token-usage__model-total {
+    width: 60px;
+    font-size: var(--text-xs);
+  }
+
+  .token-usage__model-legend {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .token-usage__legend {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .token-usage__empty {
+    min-height: 250px;
+    padding: var(--space-4);
+  }
+
+  .token-usage__empty-text {
+    font-size: var(--text-lg);
+  }
+}
+
+@media (max-width: 375px) {
+  .token-usage__header {
+    padding: var(--space-2);
+  }
+
+  .token-usage__total-value {
+    font-size: var(--text-lg);
+  }
+
+  .token-usage__bar-label {
+    width: 60px;
+  }
+
+  .token-usage__bar-value {
+    width: 45px;
+  }
+
+  .token-usage__section-title {
+    font-size: var(--text-xs);
+  }
+
+  .token-usage__model-legend-item {
+    padding: var(--space-2);
+  }
+}
+
 /* Light Mode Overrides */
 [data-theme="light"] .token-usage__header,
 [data-theme="light"] .token-usage__breakdown-item,
@@ -348,20 +443,4 @@
 
 [data-theme="light"] .token-usage__model-legend-item:hover {
   background: rgba(0, 0, 0, 0.04);
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .token-usage__header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .token-usage__bar-label {
-    width: 80px;
-  }
-
-  .token-usage__model-legend {
-    grid-template-columns: 1fr;
-  }
 }

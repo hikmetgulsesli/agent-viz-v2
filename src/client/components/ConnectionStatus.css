@@ -139,6 +139,43 @@
   }
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .connection-status {
+    padding: var(--space-2);
+    gap: var(--space-1);
+    min-height: 36px;
+  }
+
+  .connection-status__label {
+    font-size: var(--text-xs);
+  }
+
+  .connection-status__timestamp {
+    display: none; /* Hide timestamp on mobile */
+  }
+
+  .connection-status__dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .connection-status {
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .connection-status__label {
+    display: none; /* Show only icon and dot on very small screens */
+  }
+
+  .connection-status__dot {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 /* Light Mode Overrides */
 [data-theme="light"] .connection-status {
   background: rgba(0, 0, 0, 0.02);
@@ -157,20 +194,4 @@
 [data-theme="light"] .connection-status--disconnected {
   border-color: rgba(248, 113, 113, 0.4);
   background: rgba(248, 113, 113, 0.08);
-}
-
-/* Responsive - Mobile */
-@media (max-width: 480px) {
-  .connection-status {
-    padding: var(--space-1) var(--space-2);
-    gap: var(--space-1);
-  }
-
-  .connection-status__timestamp {
-    display: none;
-  }
-
-  .connection-status__label {
-    font-size: var(--text-xs);
-  }
 }
