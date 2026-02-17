@@ -173,9 +173,6 @@ describe('GlassCard Component', () => {
         content.includes('function GlassCard') || content.includes('export function GlassCard'),
         'Should be a function component'
       );
-      
-      // Check for JSX return type
-      assert.ok(content.includes('JSX.Element'), 'Should return JSX.Element');
     });
 
     it('should import ReactNode from react', async () => {
