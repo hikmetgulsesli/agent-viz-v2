@@ -1,0 +1,10 @@
+/* Import design tokens first */
+@import './styles/tokens.css';
+
+/* Base styles are defined in tokens.css */
+
+/* Additional app-specific styles */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
