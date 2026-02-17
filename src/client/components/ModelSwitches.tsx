@@ -89,9 +89,11 @@ export function ModelSwitches({
   // Filter and sort model switch events
   const modelSwitches = useMemo<ModelSwitchRecord[]>(() => {
     const switches: ModelSwitchRecord[] = events
-      .filter((event): event is AgentEvent & { type: 'model_switched'; data: { previousModel?: string; newModel: string; reason?: string } } => 
-        event.type === 'model_switched' && event.data && typeof (event.data as { newModel?: string }).newModel === 'string'
-      )
+      .filter((event): event is AgentEvent & { type: 'model_switched'; data: { previousModel?: string; newModel: string; reason?: string } } => {
+        if (event.type !== 'model_switched') return false;
+        if (!event.data) return false;
+        return typeof (event.data as { newModel?: string }).newModel === 'string';
+      })
       .map(event => ({
         agentId: event.agentId,
         previousModel: (event.data as { previousModel?: string }).previousModel,
