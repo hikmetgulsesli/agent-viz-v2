@@ -96,7 +96,8 @@ export type AgentEventPayload =
   | ToolCalledPayload
   | ModelSwitchedPayload
   | TokenUpdatePayload
-  | HeartbeatPayload;
+  | HeartbeatPayload
+  | Record<string, unknown>;
 
 /**
  * Agent event structure matching WebSocket message format

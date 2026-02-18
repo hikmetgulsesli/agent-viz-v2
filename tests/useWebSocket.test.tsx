@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
-import { useWebSocket, type WebSocketEvent } from '../src/hooks/useWebSocket';
+import { useWebSocket } from '../src/hooks/useWebSocket';
+import type { AgentEvent } from '../src/types/agent';
 
 describe('useWebSocket', () => {
   it('exports all required properties', async () => {
@@ -25,8 +26,13 @@ describe('useWebSocket', () => {
   });
 
   it('receives mock events', async () => {
-    const mockEvents: WebSocketEvent[] = [
-      { type: 'test', payload: { data: 'hello' }, timestamp: Date.now() },
+    const mockEvents: AgentEvent[] = [
+      { 
+        timestamp: Date.now(),
+        agentId: 'test-agent',
+        eventType: 'heartbeat',
+        payload: { data: 'hello' },
+      },
     ];
 
     const { result } = renderHook(() => 
@@ -37,9 +43,9 @@ describe('useWebSocket', () => {
   });
 
   it('clearEvents removes all events', async () => {
-    const mockEvents: WebSocketEvent[] = [
-      { type: 'test1', payload: {}, timestamp: Date.now() },
-      { type: 'test2', payload: {}, timestamp: Date.now() },
+    const mockEvents: AgentEvent[] = [
+      { timestamp: Date.now(), agentId: 'agent-1', eventType: 'heartbeat', payload: {} },
+      { timestamp: Date.now() + 1, agentId: 'agent-2', eventType: 'heartbeat', payload: {} },
     ];
 
     const { result } = renderHook(() => 
@@ -89,8 +95,8 @@ describe('useWebSocket', () => {
   });
 
   it('reconnect function resets state', () => {
-    const mockEvents: WebSocketEvent[] = [
-      { type: 'test', payload: {}, timestamp: Date.now() },
+    const mockEvents: AgentEvent[] = [
+      { timestamp: Date.now(), agentId: 'agent-1', eventType: 'heartbeat', payload: {} },
     ];
 
     const { result } = renderHook(() => 
@@ -109,12 +115,12 @@ describe('useWebSocket', () => {
   });
 
   it('limits events to maxEvents', async () => {
-    const mockEvents: WebSocketEvent[] = [
-      { type: 'event-0', payload: {}, timestamp: Date.now() },
-      { type: 'event-1', payload: {}, timestamp: Date.now() },
-      { type: 'event-2', payload: {}, timestamp: Date.now() },
-      { type: 'event-3', payload: {}, timestamp: Date.now() },
-      { type: 'event-4', payload: {}, timestamp: Date.now() },
+    const mockEvents: AgentEvent[] = [
+      { timestamp: Date.now(), agentId: 'agent-1', eventType: 'heartbeat', payload: {} },
+      { timestamp: Date.now() + 1, agentId: 'agent-2', eventType: 'heartbeat', payload: {} },
+      { timestamp: Date.now() + 2, agentId: 'agent-3', eventType: 'heartbeat', payload: {} },
+      { timestamp: Date.now() + 3, agentId: 'agent-4', eventType: 'heartbeat', payload: {} },
+      { timestamp: Date.now() + 4, agentId: 'agent-5', eventType: 'heartbeat', payload: {} },
     ];
 
     const { result } = renderHook(() => 
