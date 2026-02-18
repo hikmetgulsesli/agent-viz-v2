@@ -9,8 +9,9 @@ export default defineConfig({
     host: true,
   },
   build: {
-    outDir: 'dist',
+    outDir: 'dist/client',
     assetsDir: 'assets',
     sourcemap: false,
+    emptyOutDir: true,
   },
 });
