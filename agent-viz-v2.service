@@ -1,0 +1,15 @@
+[Unit]
+Description=AgentViz v2 - Real-time Agent Activity Visualization Dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=setrox
+WorkingDirectory=/home/setrox/.openclaw/agent-viz-v2
+ExecStart=/usr/bin/node dist/server/index.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=default.target
