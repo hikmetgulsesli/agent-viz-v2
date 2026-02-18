@@ -1,0 +1,46 @@
+.glass-card {
+  /* Glass morphism effect - dark theme */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Spacing and radius */
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  
+  /* Shadow */
+  box-shadow: var(--shadow-md);
+  
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.glass-card__title {
+  /* Typography - uppercase, small, muted */
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1;
+}
+
+.glass-card__content {
+  /* Content area fills remaining space */
+  flex: 1;
+  min-height: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .glass-card {
+    transition: none;
+  }
+}

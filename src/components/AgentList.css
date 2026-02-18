@@ -1,0 +1,73 @@
+/* AgentList component styles */
+
+.agent-list {
+  width: 100%;
+}
+
+/* Responsive grid layout */
+.agent-list__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+/* Tablet breakpoint: 2 columns */
+@media (min-width: 768px) {
+  .agent-list__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop breakpoint: 3 columns */
+@media (min-width: 1024px) {
+  .agent-list__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Empty state styling */
+.agent-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl) var(--space-xl);
+  gap: var(--space-lg);
+  text-align: center;
+  min-height: 300px;
+  background-color: var(--surface-alt);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.agent-list__empty-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+.agent-list__empty-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--text-muted);
+}
+
+.agent-list__empty-text {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .agent-list__grid {
+    transition: none;
+  }
+}
