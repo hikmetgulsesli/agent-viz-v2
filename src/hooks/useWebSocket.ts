@@ -1,16 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import type { AgentEvent, AgentEventType } from '../types/agent';
 
 export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
 
-export interface WebSocketEvent {
-  type: string;
-  payload: unknown;
-  timestamp: number;
-}
-
 export interface UseWebSocketReturn {
   status: ConnectionStatus;
-  events: WebSocketEvent[];
+  events: AgentEvent[];
   lastError: Error | null;
   reconnect: () => void;
   send: (message: string | object) => void;
@@ -20,7 +15,7 @@ export interface UseWebSocketReturn {
 interface UseWebSocketOptions {
   url: string;
   mockMode?: boolean;
-  mockEvents?: WebSocketEvent[];
+  mockEvents?: AgentEvent[];
   maxReconnectDelay?: number;
   initialReconnectDelay?: number;
   maxEvents?: number;
@@ -28,22 +23,26 @@ interface UseWebSocketOptions {
 }
 
 // Mock WebSocket event generator for development
-function generateMockEvents(): WebSocketEvent[] {
+function generateMockEvents(): AgentEvent[] {
+  const now = Date.now();
   return [
     {
-      type: 'agent:start',
-      payload: { agentId: 'agent-1', name: 'Developer Agent' },
-      timestamp: Date.now(),
+      timestamp: now,
+      agentId: 'agent-1',
+      eventType: 'agent_started' as AgentEventType,
+      payload: { name: 'Developer Agent', model: 'gpt-4' },
     },
     {
-      type: 'tool:call',
-      payload: { agentId: 'agent-1', tool: 'read', args: { file: 'src/App.tsx' } },
-      timestamp: Date.now() + 100,
+      timestamp: now + 100,
+      agentId: 'agent-1',
+      eventType: 'tool_called' as AgentEventType,
+      payload: { toolName: 'read', args: { file: 'src/App.tsx' } },
     },
     {
-      type: 'model:transition',
-      payload: { agentId: 'agent-1', from: 'gpt-4', to: 'gpt-4-turbo' },
-      timestamp: Date.now() + 200,
+      timestamp: now + 200,
+      agentId: 'agent-1',
+      eventType: 'model_switched' as AgentEventType,
+      payload: { previousModel: 'gpt-4', newModel: 'gpt-4-turbo' },
     },
   ];
 }
@@ -60,7 +59,7 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   } = options;
 
   const [status, setStatus] = useState<ConnectionStatus>('disconnected');
-  const [events, setEvents] = useState<WebSocketEvent[]>([]);
+  const [events, setEvents] = useState<AgentEvent[]>([]);
   const [lastError, setLastError] = useState<Error | null>(null);
   
   const wsRef = useRef<WebSocket | null>(null);
@@ -83,7 +82,7 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   }, []);
 
   // Add event to the events array (with max limit)
-  const addEvent = useCallback((event: WebSocketEvent) => {
+  const addEvent = useCallback((event: AgentEvent) => {
     setEvents(prev => {
       const newEvents = [...prev, event];
       if (newEvents.length > maxEvents) {
@@ -153,17 +152,34 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          addEvent({
-            type: data.type || 'unknown',
-            payload: data.payload || data,
-            timestamp: Date.now(),
-          });
+          // Parse gateway message format into AgentEvent
+          if (data.type === 'event' && data.data) {
+            const eventData = data.data;
+            addEvent({
+              timestamp: eventData.timestamp || Date.now(),
+              agentId: eventData.agentId || 'unknown',
+              eventType: eventData.eventType || 'heartbeat',
+              payload: eventData.payload || {},
+            });
+          } else if (data.timestamp && data.agentId && data.eventType) {
+            // Direct AgentEvent format
+            addEvent(data as AgentEvent);
+          } else {
+            // Generic event - map to heartbeat
+            addEvent({
+              timestamp: Date.now(),
+              agentId: 'system',
+              eventType: 'heartbeat',
+              payload: data,
+            });
+          }
         } catch {
           // Handle non-JSON messages
           addEvent({
-            type: 'message',
-            payload: event.data,
             timestamp: Date.now(),
+            agentId: 'system',
+            eventType: 'heartbeat',
+            payload: { message: event.data },
           });
         }
       };
