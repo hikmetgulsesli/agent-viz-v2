@@ -289,7 +289,7 @@ describe('App Dashboard Layout', () => {
     it('displays event count in footer', () => {
       mockedUseWebSocket.mockReturnValue({
         ...mockConnectedState,
-        events: [{ type: 'test', payload: {}, timestamp: Date.now() }],
+        events: [{ eventType: 'agent_started', agentId: 'test-agent', payload: { name: 'Test', model: 'gpt-4' }, timestamp: Date.now() }],
       });
       render(<App />);
       expect(screen.getByText(/1 events received/i)).toBeInTheDocument();
