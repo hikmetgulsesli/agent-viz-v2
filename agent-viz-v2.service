@@ -4,7 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
+# TODO: Replace with your deployment user (e.g., setrox, www-data, or a dedicated user)
 User=setrox
+# TODO: Replace with your deployment directory path
 WorkingDirectory=/home/setrox/.openclaw/agent-viz-v2
 ExecStart=/usr/bin/node dist/server/index.js
 Restart=always

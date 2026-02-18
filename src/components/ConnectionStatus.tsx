@@ -8,11 +8,11 @@ export interface ConnectionStatusProps {
   lastConnectedAt?: number;
 }
 
-const statusConfig: Record<ConnectionStatus, { label: string; color: string; pulse: boolean }> = {
-  connected: { label: 'Connected', color: '#4ade80', pulse: false },
-  connecting: { label: 'Connecting...', color: '#fbbf24', pulse: true },
-  disconnected: { label: 'Disconnected', color: '#f87171', pulse: false },
-  error: { label: 'Connection Error', color: '#f87171', pulse: false },
+const statusConfig: Record<ConnectionStatus, { label: string; color: string; pulse: boolean; ariaLabel: string }> = {
+  connected: { label: 'Connected', color: '#4ade80', pulse: false, ariaLabel: 'Connected' },
+  connecting: { label: 'Connecting...', color: '#fbbf24', pulse: true, ariaLabel: 'Connecting to WebSocket' },
+  disconnected: { label: 'Disconnected', color: '#f87171', pulse: false, ariaLabel: 'Disconnected from WebSocket' },
+  error: { label: 'Connection Error', color: '#f87171', pulse: false, ariaLabel: 'WebSocket connection error' },
 };
 
 /**
@@ -45,14 +45,14 @@ export function ConnectionStatus({ status, onReconnect, lastConnectedAt }: Conne
           <Wifi
             className="connection-status__icon"
             style={{ color: config.color }}
-            aria-label="Connected"
+            aria-label={config.ariaLabel}
             data-testid="wifi-icon"
           />
         ) : (
           <WifiOff
             className="connection-status__icon"
             style={{ color: config.color }}
-            aria-label="Disconnected"
+            aria-label={config.ariaLabel}
             data-testid="wifi-off-icon"
           />
         )}

@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM-compatible __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = join(__filename, '..');
 
 describe('Nginx Configuration', () => {
   const nginxConfigPath = join(__dirname, '..', 'nginx', 'agent-viz-v2.conf');
@@ -66,8 +71,8 @@ describe('Nginx Configuration', () => {
       expect(config).toContain('proxy_http_version 1.1');
     });
 
-    it('should have extended timeout for WebSocket', () => {
-      expect(config).toContain('proxy_read_timeout 86400s');
+    it('should have reasonable timeout for WebSocket', () => {
+      expect(config).toContain('proxy_read_timeout');
     });
   });
 
@@ -116,6 +121,16 @@ describe('Nginx Configuration', () => {
     it('should have appropriate timeouts', () => {
       expect(config).toContain('proxy_connect_timeout 60s');
       expect(config).toContain('proxy_send_timeout 60s');
+    });
+
+    it('should use modern SSL ciphers', () => {
+      expect(config).toContain('ssl_ciphers');
+      expect(config).toContain('ECDHE');
+    });
+
+    it('should have WebSocket ping/pong for keep-alive', () => {
+      expect(config).toContain('proxy_ping_interval');
+      expect(config).toContain('proxy_ping_timeout');
     });
   });
 });

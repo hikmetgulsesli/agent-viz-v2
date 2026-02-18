@@ -19,12 +19,18 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3503;
 const GATEWAY_WS_URL = process.env.GATEWAY_WS_URL || 'ws://127.0.0.1:18789';
 const STATIC_DIR = path.resolve(__dirname, '../../dist/client');
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || [];
 
 // Create Express app
 const app = express();
 
-// Enable CORS for all origins (development)
-app.use(cors());
+// CORS configuration - restrict to allowed origins in production
+const corsOptions: cors.CorsOptions = {
+  origin: ALLOWED_ORIGINS.length > 0 ? ALLOWED_ORIGINS : true, // Allow all in dev, restrict in prod
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Parse JSON bodies
 app.use(express.json());
@@ -250,6 +256,7 @@ server.listen(PORT, () => {
   console.log(`[Server] Health check: http://localhost:${PORT}/health`);
   console.log(`[Server] WebSocket endpoint: ws://localhost:${PORT}/ws`);
   console.log(`[Server] Gateway proxy: ${GATEWAY_WS_URL}`);
+  console.log(`[Server] Allowed origins: ${ALLOWED_ORIGINS.length > 0 ? ALLOWED_ORIGINS.join(', ') : 'all (development)'}`);
   
   // Connect to gateway
   connectToGateway();

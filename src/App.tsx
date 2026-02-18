@@ -11,8 +11,11 @@ import { GlassCard } from './components/GlassCard';
 import type { Agent, AgentEvent } from './types/agent';
 import './App.css';
 
-// WebSocket URL from environment or default
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://127.0.0.1:18789';
+// WebSocket URL from environment or default to same-origin /ws endpoint
+// This ensures the UI works correctly whether served locally or behind Nginx
+const WS_URL =
+  import.meta.env.VITE_WS_URL ||
+  `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`;
 
 /**
  * Convert WebSocket events to Agent activities map

@@ -1,73 +1,144 @@
-# React + TypeScript + Vite
+# AgentViz v2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Real-time WebSocket-based dashboard for visualizing OpenClaw agent activity.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Live Agent Status**: See which agents are running, idle, or have errors
+- **Activity Feed**: Real-time stream of tool calls and completions
+- **Token Usage**: Visual bar chart of token consumption per agent
+- **Model Tracking**: Monitor which LLM model each agent is using
+- **Connection Health**: WebSocket connection status with auto-reconnect
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React 19 + TypeScript + Vite
+- **Backend**: Express 5 + WebSocket (ws library)
+- **Icons**: Lucide React
+- **Design**: Custom dark theme with CSS variables
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 18+
+- npm or yarn
+- OpenClaw gateway running on ws://127.0.0.1:18789 (or configure via GATEWAY_WS_URL)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Installation
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Start the development server:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+The app will be available at http://localhost:3503
+
+## Build & Production
+
+Build both client and server:
+
+```bash
+npm run build
+```
+
+Start the production server:
+
+```bash
+npm start
+```
+
+Or run the server directly with TypeScript:
+
+```bash
+npm run server
+```
+
+## Environment Variables
+
+Create a `.env` file (see `.env.example`):
+
+```bash
+# Client configuration
+VITE_WS_URL=ws://127.0.0.1:3503/ws
+VITE_PORT=3503
+VITE_MOCK_WS=false
+
+# Server configuration
+PORT=3503
+GATEWAY_WS_URL=ws://127.0.0.1:18789
+```
+
+## WebSocket Events
+
+The dashboard listens for these event types from the gateway:
+
+- `agent_started` - Agent started with name and model
+- `agent_ended` - Agent completed
+- `tool_called` - Tool execution started
+- `tool_completed` - Tool execution finished
+- `model_switched` - LLM model changed
+- `token_update` - Token usage updated
+- `heartbeat` - Agent status heartbeat
+
+## Testing
+
+Run all tests:
+
+```bash
+npm test
+```
+
+Run tests in watch mode:
+
+```bash
+npm test:watch
+```
+
+Run type checking:
+
+```bash
+npm run typecheck
+```
+
+## Deployment
+
+### Systemd Service
+
+Copy the service file to your user services directory:
+
+```bash
+cp agent-viz-v2.service ~/.config/systemd/user/
+```
+
+Start and enable the service:
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable agent-viz-v2.service
+systemctl --user start agent-viz-v2.service
+```
+
+### Nginx Reverse Proxy
+
+Copy the nginx config:
+
+```bash
+sudo cp nginx/agent-viz-v2.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/agent-viz-v2.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Make sure you have SSL certificates at:
+- `/etc/nginx/ssl/origin.crt`
+- `/etc/nginx/ssl/origin.key`
+
+## License
+
+MIT
